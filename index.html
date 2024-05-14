@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Form</title>
+  <style>
+    body{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const App = () => {
+      const [hobbies, setHobbies] = React.useState([""]);
+
+      const formStyle = {
+        height : "100px",
+        width : "400px",
+        display : "flex",
+        flexDirection : "row",
+        justifyContent : "space-evenly",
+        alignItems : "center",
+        padding: "10%",
+        boxShadow: "2px 1px 5px 1px grey"
+      }
+      
+      const btnStyle = {
+        marginLeft : "10px", 
+        width: "100px", 
+        height: "25px", 
+        boxShadow: "1px 2px 5px 1px lightblue"
+      }
+      const handleInputChange = (index, value) => {
+        const newHobbies = [...hobbies];
+        newHobbies[index] = value;
+        setHobbies(newHobbies);
+      };
+
+      const handleAddInput = () => {
+        setHobbies([...hobbies, ""]); // Add an empty string when adding a new input
+      };
+
+      const handleRemoveInput = (index) => {
+        if (index === 0) return; // Prevent removing the first input
+        const newHobbies = [...hobbies];
+        newHobbies.splice(index, 1);
+        setHobbies(newHobbies);
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(hobbies);
+      };
+
+      return (
+        <div style={formStyle}>
+        <form onSubmit={handleSubmit} style={{height: "100%", width: "100%"}}>
+          {hobbies.map((hobby, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                value={hobby}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                style = {{
+                  height : "20px",
+                  width : "250px",
+                  marginTop : "2%"
+                }}
+              />
+              {index === 0 ?
+                (
+                <button type="button" onClick={handleAddInput} style={btnStyle}>Add</button>
+              ) : 
+              (
+                <button type="button" onClick={() => handleRemoveInput(index)} style={btnStyle}>Remove</button>
+              )}
+            </div>
+          ))}
+          <button type="submit" style={{marginTop : "10px", boxShadow: "1px 2px 5px 1px lightblue", padding: "6px"}}>Submit</button>
+        </form>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>
